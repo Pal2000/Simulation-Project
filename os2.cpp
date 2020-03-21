@@ -7,9 +7,8 @@ struct ProcessInfo{
 	int AT;
 	int BT;
 	int WT;
-	int FT;
+	int CH;
 	int RT;
-	int ST;
 	int priority;
 };
 
@@ -21,7 +20,7 @@ struct ProcessInfo obj;
 
 ///Methods:-->
 
-//display the queues
+//display the input
 void display(vector<process> input)
 {
 	cout<<"\n\n";
@@ -64,6 +63,14 @@ struct prioritySort
 	}
 };
 
+//According to pid, sort the processes
+bool pidSort(const process& x , const process& y)
+{
+	return x.pid < y.pid;
+}
+
+
+//to display the created priority queue
 void showpq(priority_queue < process ,vector<process> ,prioritySort> pq)
 {
 	while(!pq.empty())
@@ -79,27 +86,26 @@ void showpq(priority_queue < process ,vector<process> ,prioritySort> pq)
 int main()
 {
 	string pid;
-	int AT;
-	int BT;
-	int WT;
-	int FT;
-	int RT;
-	int ST;
-	int priority;
+	int AT;  // arrival time
+	int BT; // burst time
+	int WT; // waiting time
+	int CH; // only for check the traversed process for calculating waiting time
+	int RT; // remaining time
+	int priority; // priority
 	int no;
 	
 	int cpuState = 0; //CPU busy =1 CPU idle=0
-	int QT = 2 ; //Time Quantum for process
+	int QT = 1 ; //Time Quantum for process
 	current.pid = "-1";
 	current.priority = 1000000;
 	int t=0;// time clock
 	int pp=0;
 	int rr=0;
 	
-	cout<<"\n Enter no of process: ";
+	cout<<"\n Enter number of processes: ";
 	cin>>no;
 	vector<process> input;
-	cout<<"\n Enter pid( in alphanumeric), arrival time, burst time, priority of "<<no<<" processes \n";
+	cout<<"\nEnter pid (in alphanumeric), arrival time, burst time, priority of "<<no<<" processes in this order only\n";
 	for(int i=0;i<no;i++)
 	{
 		cin>>pid>>AT>>BT>>priority;
@@ -107,17 +113,19 @@ int main()
 		obj.AT=AT;
 		obj.BT=BT;
 		obj.RT=BT;
+		obj.CH=0;
 		obj.priority=priority;
 		input.push_back(obj);
 	}
-	display(input);
-	//sort according to arrival time 
-	sort(input.begin(),input.end(),arrivalTimeSorting);
-	cout<<"\n sorted input according to arrival time. ";
+	
+	cout<<"\n\nYour entered Processes with proper details.\n";
 	display(input);
 	
-	// calculate total time for creating gantt chart
-	int totalTime=0;
+	sort(input.begin(),input.end(),arrivalTimeSorting); //sort according to arrival time 
+	cout<<"\n Sorted input according to arrival time. ";
+	display(input);  //to see the sorted processes uncomment this
+	
+	int totalTime=0;  // calculate total time for creating gantt chart
 	totalTime = totalTime + input[0].AT;
     for(int i= 0 ;i< no; i++ )
     {
@@ -128,29 +136,28 @@ int main()
     	else
     	{
     		int diff = (input[i].AT - totalTime);
-    		totalTime = totalTime + diff + BT;
+    		totalTime = totalTime + diff + input[i].BT;
 
     	}
     }
 
-	string Ghantt[totalTime]={""}; //Ghantt Chart
+	string Ghantt[totalTime+1]={""}; //Ghantt Chart
 	for(int i= 0; i< totalTime; i++ )
 	{
-		Ghantt[i]=-1;
+		Ghantt[i]="-1";
 	}
-	cout<<"\ntotal exection time : "<<totalTime<<endl;
+	cout<<"\ntotal exection time : "<<totalTime<<endl<<endl;  // total time needed for all process
 	
-	//priority queue
-	priority_queue < process ,vector<process> ,prioritySort> pq;
-	/*for( int j = 0; j< no ; j++ )
+
+	priority_queue < process ,vector<process> ,prioritySort> pq;  //priority queue
+	
+	/*for( int j = 0; j< no ; j++ )  // to check the queue uncomment this
 	{
 		pq.push(input[j]);
 	}
-	//display queue
 	showpq(pq);*/
 	
-	//round robin
-	queue<process> rb;
+	queue<process> rb;  //round robin queue
 	
 	
 	
@@ -173,7 +180,7 @@ int main()
 				pq.pop();
 				cpuState = 1;
 				pp = 1;
-				QT = 2; 
+				//QT = 2; 
 			}
 			else if(!rb.empty())
 			{
@@ -181,7 +188,7 @@ int main()
 				rb.pop();
 				cpuState = 1;
 				rr = 1;
-				QT = 2;
+				QT*= 2;
 			}
 		}
 		else if(cpuState == 1) //If cpu has any procss
@@ -193,7 +200,7 @@ int main()
 					rb.push(current); //push current process in Rb
 					current = pq.top();
 					pq.pop();
-					QT = 2; 
+					//QT = QT*2; 
 				}
 			}
 			else if(rr == 1 && (!pq.empty())) //If process is from RQ and new process come  in PQ
@@ -203,7 +210,7 @@ int main()
 				pq.pop();
 				rr = 0;
 				pp = 1;
-				QT = 2;
+				QT = QT*2;
 			}
 		}
 
@@ -213,17 +220,17 @@ int main()
 			current.RT--;
 			QT--;
 			Ghantt[t] = current.pid;
-			cout<<"Ghatt process: "<<Ghantt[t]<<"\t";
 			if(current.RT == 0) //If process Finish
 			{
 				cpuState = 0 ;
-				QT = 2 ;
-				current.pid = -1;
+				if(pp==0 && rr==1)
+					QT = QT* 2 ;
+				current.pid = "-1";
 				current.priority =1000000 ;
 				rr = 0;
 				pp = 0;
 			}
-			else if(QT== 0 ) //If time Qunatum of a current running process Finish
+			else if(QT== 0 && pp==0 && rr==1) //If time Qunatum of a current running process Finish
 			{
 				rb.push(current);// push into rb queue becoz then it will excute acc to round robin 
 				current.pid = "-1";
@@ -234,24 +241,62 @@ int main()
 			}
 		}
 	}
-
-
-	//sort( input.begin(), input.end(), idsort );
-/*	
-	for(int i=0;i<n;i++)
-	{
-		for(int k=total_exection_time;k>=0;k--)
+/*
+for(int i=0;i<=totalTime;i++)
+{
+	cout<<Ghantt[i]<<"  ";
+}
+*/
+	
+	
+	// calculations for waiting time
+	for(int i=0;i<=totalTime;i++)
+	{ 
+		for(int j=0;j<no;j++)
 		{
-			if(Ghant[k]==i+1)
+			if(Ghantt[i]==input[j].pid && input[j].CH==0)
 			{
-				input[i].F_time=k+1;
-				break;
-
+				input[j].CH=1;
+				int ft=i+1;
+				int st=i;
+				cout<<"\n PID: "<<input[j].pid<<"  "<<st<<" - "<<input[j].AT;
+				int wt=st-input[j].AT;
+				for(int k=i+1;k<=totalTime;k++)
+				{
+					if(Ghantt[k]==input[j].pid)
+					{
+						cout<<" + ("<<k<<" - "<<ft<<")  ";
+						wt+=(k-ft);
+						ft=k+1;
+					}
+				}
+				input[j].WT=wt;
+				cout<<" = "<<input[j].WT<<endl<<endl;
 			}
 		}
 	}
 	
-*/	
+	// Ghantt Chart
+	cout<<"\n NOTE :-- If value of Ghantt chart comes -1 that means CPU is IDLE, no process comes yet!!";
+	cout<<"\n Ghantt Chart: \n";
+	cout<<"***************\n\n";
+	for(int i=0;i<totalTime;i++)
+	{
+		cout<<Ghantt[i]<<"  |   "<<i<<"\n";
+	}
 	
+//display of Waiting time of all the processes
+
+	sort( input.begin(), input.end(), pidSort );  // sort to display according to pid of processes
+	cout<<"\n\n";
+	float sumWT=0, sumTA=0;
+	for(int i=0;i<no;i++)
+	{
+		cout<<"\n Pid : "<<input[i].pid<<"  WT : "<<input[i].WT;
+		sumWT+=input[i].WT;
+		sumTA+=input[i].WT+input[i].BT;
+	}
 	
+	cout<<"\n\n Average Waiting Time for all the processes is "<<sumWT/no;
+	cout<<"\n\n Average Turn Around Time for all processes is "<<sumTA/no;
 }
