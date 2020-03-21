@@ -29,14 +29,20 @@ WT -> waiting time
 
 <<====================================================================================================>>
  
+   
+     ## Updation 1 ##
+ Start with creation of queues and arrays for the storing the processes.
  
-     ## Updation1   17-March-2020 ##
- Making a structure for all the Process, created  priority Queue and Queue for Round Robin.
+     ## Updation 2 ##
+ Making a structure created  priority Queue and Queue for Round Robin.
+    
+     ## Updation 3 ##
+ Code the Algorithms for Fixed Priority Preemptive and Round Robin Scheduling.
  
-     ## Updation2   19-March-2020##
+     ## Updation 4 ##
  Create a Gantt Chart which will show the flow in which all processes are executing.
 	
-     ## Updation 3  21-March-2020##
- Calculate waiting Time and Turn Around Time and finally complete and the whole project
+     ## Updation 5 ##
+ Calculate waiting Time and Turn Around Time and finally complete and the whole project.
  
 NOTE: -->> os1 file is .C file and os2 file is .C++ file. Although the content is same, just language difference is there. In c++ file I have used C++ STL for priority Queue and Queue for Round Robin. 
