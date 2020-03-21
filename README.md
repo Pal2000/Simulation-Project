@@ -15,7 +15,7 @@ process P2 preempts currently running process P1 and process P1 will go to secon
 * Priority of Queue 2 has lower priority than in Queue 1.
 
 
-Suppose Queue 1 is empty and currently process from Queue 2 is being executed. Now, If at this time a new process arrives then new 
+Let suppose Queue 1 is empty and currently process from Queue 2 is being executed. Now, If at this time a new process arrives then new 
 process will be part of Queue 1. So, new process should be scheduled as Queue 1 has higher priority than Queue 2. Again after Queue 1
 becomes empty Queue 2 will resume execution.
 
@@ -27,7 +27,7 @@ QT -> quantum time
 RT -> remaining time
 WT -> waiting time
 
-<<=========================================================================================================>>
+<<====================================================================================================>>
  
  
      ## Updation1   17-March-2020 ##
