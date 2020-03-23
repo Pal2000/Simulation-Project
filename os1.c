@@ -104,7 +104,7 @@ void displayPQ(struct ProcessInfo input[],int size)
 void display(struct ProcessInfo input[])
 {
 	int i;
-	printf("\n\n");
+	printf("\n");
 	for(i=0;i<n;i++)
 	{
 		printf("\n PID: %s   Arrival Time : %d   Burst Time : %d   Priority :  %d ",input[i].pid,input[i].AT,input[i].BT,input[i].priority);
@@ -126,14 +126,14 @@ int main()
 	int no,j,k,i;
 	
 	int cpuState = 0; //CPU busy =1 CPU idle=0
-	int QT = 1 ; //Time Quantum for process
+	int QT = 2 ; //Time Quantum for process
 	strcpy(current.pid,"-1");
 	current.priority = 1000000;
 	int t=0;// time clock
 	int pp=0;
 	int rr=0;
 	
-	printf("\n Enter number of processes: ");
+	printf("\nEnter number of processes: ");
 	scanf("%d",&no);
 	n=no;
 	struct ProcessInfo input[no]; // input for all process
@@ -151,12 +151,12 @@ int main()
 		input[i].WT=0;
 		input[i].RT=input[i].BT;
 	}
-	printf("\n\nYour entered Processes with proper details.\n");
+	printf("\nYour entered Processes with proper details.\n");
 	display(input);
 	
 	arrivalTimeSorting(input); //sort according to arrival time 
-	printf("\n Sorted input according to arrival time. ");
-	display(input);  //to see the sorted processes uncomment this
+//	printf("\n Sorted input according to arrival time. ");
+//	display(input);  //to see the sorted processes uncomment this
 	
 	int totalTime=0;  // calculate total time for creating gantt chart
 	totalTime = totalTime + input[0].AT;
@@ -179,7 +179,7 @@ int main()
 	{
 		strcpy(Ghantt[i],"-1");
 	}
-	printf("\ntotal exection time : %d ",totalTime);  // total time needed for all process
+	printf("\n\ntotal exection time : %d \n",totalTime);  // total time needed for all process
 	
 	for (t=0;t<=totalTime;t++)
 	{
@@ -213,6 +213,7 @@ int main()
 				sizepq--;
 				cpuState = 1;
 				pp = 1;
+				//Q=2;
 			}
 			else if(sizerb+1!=0)
 			{
@@ -225,7 +226,7 @@ int main()
 				sizerb--;
 				cpuState = 1;
 				rr = 1;
-				QT*= 2;
+				QT= 2;
 			}
 		}
 		else if(cpuState == 1) //If cpu has any procss
@@ -250,7 +251,7 @@ int main()
 						pq[i-1]=pq[i];
 					}
 					sizepq--;
-					//QT = QT*2; 
+					//QT = 2; 
 				}
 			}
 			else if(rr == 1 && (sizepq+1!=0)) //If process is from RQ and new process come  in PQ
@@ -274,7 +275,7 @@ int main()
 
 				rr = 0;
 				pp = 1;
-				QT = QT*2;
+				QT = 2;
 			}
 		}
 
@@ -288,12 +289,13 @@ int main()
 			{
 				cpuState = 0 ;
 				if(pp==0 && rr==1)
-					QT = QT* 2 ;
+					QT = 2 ;
 				strcpy(current.pid , "-1");
 				current.priority =1000000 ;
 				rr = 0;
 				pp = 0;
 			}
+			// else if(QT==0)   //if you want to apply Quantum Time for Queue1 also uncomment this
 			else if(QT== 0 && pp==0 && rr==1) //If time Qunatum of a current running process Finish
 			{
 				// push into rb queue becoz then it will excute acc to round robin 
@@ -311,6 +313,7 @@ int main()
 				rr = 0;
 				pp = 0;
 				cpuState=0;
+			
 			}
 		}
 	}
@@ -326,25 +329,25 @@ int main()
 				input[j].CH=1;
 				int ft=i+1;
 				int st=i;
-				printf("\n PID:  %s  %d  -  %d  ",input[j].pid,st,input[j].AT);
+				//printf("\n PID:  %s  %d  -  %d  ",input[j].pid,st,input[j].AT);
 				int wt=st-input[j].AT;
 				for(k=i+1;k<=totalTime;k++)
 				{
 					if(strcmp(Ghantt[k],input[j].pid)==0 )
 					{
-						printf(" + ( %d - %d )",k,ft);
+						//printf(" + ( %d - %d )",k,ft);
 						wt+=(k-ft);
 						ft=k+1;
 					}
 				}
 				input[j].WT=wt;
-				printf(" = %d \n\n",input[j].WT);
+				//printf(" = %d \n\n",input[j].WT);
 			}
 		}
 	}
 	
 	// Ghantt Chart
-	printf("\n NOTE :-- If value of Ghantt chart comes -1 that means CPU is IDLE, no process comes yet!!");
+	printf("\n NOTE :-- If value of Ghantt chart comes -1 that means CPU is IDLE, no process comes yet!!\n");
 	printf("\n Ghantt Chart: \n");
 	printf("***************\n\n");
 	for(i=0;i<totalTime;i++)
@@ -355,17 +358,17 @@ int main()
 //display of Waiting time of all the processes
 
 	pidSort(input);  // sort to display according to pid of processes
-	printf("\n\n");
+	printf("\n");
 	float sumWT=0, sumTA=0;
 	for(i=0;i<no;i++)
 	{
-		printf("\n Pid : %s     WT: %d  ",input[i].pid,input[i].WT);
+		printf("\n Pid : %s     Waiting Time: %d  ",input[i].pid,input[i].WT);
 		sumWT+=input[i].WT;
 		sumTA+=input[i].WT+input[i].BT;
 	}
 	
 	printf("\n\n Average Waiting Time for all the processes is %0.2f",sumWT/no);
-	printf("\n\n Average Turn Around Time for all processes is %0.2f",sumTA/no);
+	printf("\n Average Turn Around Time for all processes is %0.2f",sumTA/no);
 
 return 0;
 }
