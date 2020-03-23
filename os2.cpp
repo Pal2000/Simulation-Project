@@ -95,7 +95,7 @@ int main()
 	int no;
 	
 	int cpuState = 0; //CPU busy =1 CPU idle=0
-	int QT = 1 ; //Time Quantum for process
+	int QT = 2 ; //Time Quantum for process
 	current.pid = "-1";
 	current.priority = 1000000;
 	int t=0;// time clock
@@ -122,8 +122,8 @@ int main()
 	display(input);
 	
 	sort(input.begin(),input.end(),arrivalTimeSorting); //sort according to arrival time 
-	cout<<"\n Sorted input according to arrival time. ";
-	display(input);  //to see the sorted processes uncomment this
+	//cout<<"\n Sorted input according to arrival time. ";
+	//display(input);  //to see the sorted processes uncomment this
 	
 	int totalTime=0;  // calculate total time for creating gantt chart
 	totalTime = totalTime + input[0].AT;
@@ -188,7 +188,7 @@ int main()
 				rb.pop();
 				cpuState = 1;
 				rr = 1;
-				QT*= 2;
+				QT= 2;
 			}
 		}
 		else if(cpuState == 1) //If cpu has any procss
@@ -210,7 +210,7 @@ int main()
 				pq.pop();
 				rr = 0;
 				pp = 1;
-				QT = QT*2;
+				QT = 2;
 			}
 		}
 
@@ -259,19 +259,19 @@ for(int i=0;i<=totalTime;i++)
 				input[j].CH=1;
 				int ft=i+1;
 				int st=i;
-				cout<<"\n PID: "<<input[j].pid<<"  "<<st<<" - "<<input[j].AT;
+				//cout<<"\n PID: "<<input[j].pid<<"  "<<st<<" - "<<input[j].AT;
 				int wt=st-input[j].AT;
 				for(int k=i+1;k<=totalTime;k++)
 				{
 					if(Ghantt[k]==input[j].pid)
 					{
-						cout<<" + ("<<k<<" - "<<ft<<")  ";
+						//cout<<" + ("<<k<<" - "<<ft<<")  ";
 						wt+=(k-ft);
 						ft=k+1;
 					}
 				}
 				input[j].WT=wt;
-				cout<<" = "<<input[j].WT<<endl<<endl;
+				//cout<<" = "<<input[j].WT<<endl<<endl;
 			}
 		}
 	}
