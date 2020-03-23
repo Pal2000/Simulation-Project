@@ -1,5 +1,7 @@
  Simulation Based Assignment:
- This system will gives you the entire details about the order in which processes will execute in the form of Ghantt Chart. It will also show the total time needed for whole executing all processes. Moreover, waiting time and turn around time for each of the process.
+ 
+ 
+This system will gives you the entire details about the order in which processes will execute in the form of Ghantt Chart. It will also show the total time needed for whole executing all processes. Moreover, waiting time and turn around time for each of the process.
  
  NOTE: -->> os1 file is .C file and os2 file is .C++ file. Although the content is same, just language difference is there. In c++ file I have used C++ STL for priority Queue and Queue for Round Robin. 
 
@@ -49,5 +51,5 @@ WT -> waiting time
      ## Updation 5 ##
  Calculate waiting Time and Turn Around Time.
  
- <=====Input=======>
+
  
