@@ -224,7 +224,7 @@ int main()
 			{
 				cpuState = 0 ;
 				if(pp==0 && rr==1)
-					QT = QT* 2 ;
+					QT = 2 ;
 				current.pid = "-1";
 				current.priority =1000000 ;
 				rr = 0;
