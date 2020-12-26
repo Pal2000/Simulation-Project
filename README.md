@@ -35,21 +35,3 @@ WT -> waiting time
 
 <<=====================================================================>>
  
-   
-     ## Updation 1 ##
- Start with creation of queues and arrays for the storing the processes.
- 
-     ## Updation 2 ##
- Making a structure created  priority Queue and Queue for Round Robin.
-    
-     ## Updation 3 ##
- Code the Algorithms for Fixed Priority Preemptive and Round Robin Scheduling.
- 
-     ## Updation 4 ##
- Create a Gantt Chart which will show the flow in which all processes are executing.
-	
-     ## Updation 5 ##
- Calculate waiting Time and Turn Around Time.
- 
-
- 
